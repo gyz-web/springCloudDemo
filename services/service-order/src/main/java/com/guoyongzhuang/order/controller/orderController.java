@@ -1,6 +1,7 @@
 package com.guoyongzhuang.order.controller;
 
 import com.guoyongzhuang.bean.order.Order;
+import com.guoyongzhuang.order.properties.OrderProperties;
 import com.guoyongzhuang.order.service.orderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,15 +16,18 @@ public class orderController {
     @Autowired
     orderService orderService;
 
+    @Autowired
+    private OrderProperties orderProperties;
+
     // 获取Nacos中的配置
-    @Value("${order.timeout}")
-    String orderTimeout;
-    @Value("${order.auto-confirm}")
-    String orderAutoConfirm;
+//    @Value("${order.timeout}")
+//    String orderTimeout;
+//    @Value("${order.auto-confirm}")
+//    String orderAutoConfirm;
     @GetMapping("/getConfig")
     public String getConfig() {
-        return "orderTimeout: " + orderTimeout +
-                ", orderAutoConfirm: " +orderAutoConfirm ;
+        return "orderTimeout: " + orderProperties.getTimeout() +
+                ", orderAutoConfirm: " +orderProperties.getAutoConfirm() ;
     }
 
     @GetMapping("/create")
