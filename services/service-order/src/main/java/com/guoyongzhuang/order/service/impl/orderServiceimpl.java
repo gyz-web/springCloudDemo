@@ -23,7 +23,8 @@ public class orderServiceimpl implements orderService {
     DiscoveryClient discoveryClient;
 
     @Qualifier("myRestTemplate")
-    @Autowired RestTemplate myRestTemplate;
+    @Autowired
+    RestTemplate myRestTemplate;
 
     @Autowired
     LoadBalancerClient loadBalancerClient;
@@ -32,7 +33,8 @@ public class orderServiceimpl implements orderService {
     public Order createOrder(Long productId, Long userId) {
 
 //        Product productFromRemote = getProductFromRemote(productId);
-        Product productFromRemote = getProductFromRemoteWithLoadBalancer(productId);
+//        Product productFromRemote = getProductFromRemoteWithLoadBalancer(productId);
+        Product productFromRemote = getProductFromRemoteWithLoadBalancerWithAnnotation(productId);
 
         BigDecimal num = new BigDecimal(productFromRemote.getNum());
         BigDecimal price = productFromRemote.getPrice();
@@ -51,38 +53,44 @@ public class orderServiceimpl implements orderService {
 
     }
 
-    private Product getProductFromRemote(Long productId){
+    private Product getProductFromRemote(Long productId) {
         List<ServiceInstance> instances = discoveryClient.getInstances("service-product");
 
         ServiceInstance instance = instances.get(0);
 
-        String url="http://"+instance.getHost()+":"+instance.getPort()+"/getProduct/"+productId;
+        String url = "http://" + instance.getHost() + ":" + instance.getPort() + "/getProduct/" + productId;
 
-        log.info("remote request url ={}",url);
+        log.info("remote request url ={}", url);
 
         Product product = myRestTemplate.getForObject(url, Product.class);
-
 
 
         return product;
 
     }
 
-    private Product getProductFromRemoteWithLoadBalancer(Long productId){
+    private Product getProductFromRemoteWithLoadBalancer(Long productId) {
         ServiceInstance choose = loadBalancerClient.choose("service-product");
 
 
-        String url="http://"+choose.getHost()+":"+choose.getPort()+"/getProduct/"+productId;
+        String url = "http://" + choose.getHost() + ":" + choose.getPort() + "/getProduct/" + productId;
 
-        log.info("remote request url ={}",url);
+        log.info("remote request url ={}", url);
 
         Product product = myRestTemplate.getForObject(url, Product.class);
-
 
 
         return product;
 
     }
 
+    private Product getProductFromRemoteWithLoadBalancerWithAnnotation(Long productId) {
+        String url = "http://service-product/getProduct/" + productId;
+        log.info("remote request url ={}", url);
+        Product product = myRestTemplate.getForObject(url, Product.class); //service-product会被动态替换，并且使用@LoadBalanced 注解可以有负载均衡功能
+
+        return product;
+
+    }
 
 }
