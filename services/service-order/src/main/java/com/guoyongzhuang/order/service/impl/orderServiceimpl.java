@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,10 +25,14 @@ public class orderServiceimpl implements orderService {
     @Qualifier("myRestTemplate")
     @Autowired RestTemplate myRestTemplate;
 
+    @Autowired
+    LoadBalancerClient loadBalancerClient;
+
     @Override
     public Order createOrder(Long productId, Long userId) {
 
-        Product productFromRemote = getProductFromRemote(productId);
+//        Product productFromRemote = getProductFromRemote(productId);
+        Product productFromRemote = getProductFromRemoteWithLoadBalancer(productId);
 
         BigDecimal num = new BigDecimal(productFromRemote.getNum());
         BigDecimal price = productFromRemote.getPrice();
@@ -52,6 +57,22 @@ public class orderServiceimpl implements orderService {
         ServiceInstance instance = instances.get(0);
 
         String url="http://"+instance.getHost()+":"+instance.getPort()+"/getProduct/"+productId;
+
+        log.info("remote request url ={}",url);
+
+        Product product = myRestTemplate.getForObject(url, Product.class);
+
+
+
+        return product;
+
+    }
+
+    private Product getProductFromRemoteWithLoadBalancer(Long productId){
+        ServiceInstance choose = loadBalancerClient.choose("service-product");
+
+
+        String url="http://"+choose.getHost()+":"+choose.getPort()+"/getProduct/"+productId;
 
         log.info("remote request url ={}",url);
 
