@@ -1,6 +1,6 @@
 package com.guoyongzhuang.product.controller;
 
-import com.guoyongzhuang.product.bean.Product;
+import com.guoyongzhuang.bean.product.Product;
 import com.guoyongzhuang.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

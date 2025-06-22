@@ -1,4 +1,4 @@
-package com.guoyongzhuang.product.bean;
+package com.guoyongzhuang.bean.product;
 
 import lombok.Data;
 

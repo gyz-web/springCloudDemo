@@ -1,6 +1,7 @@
 package com.guoyongzhuang.product.service;
 
-import com.guoyongzhuang.product.bean.Product;
+
+import com.guoyongzhuang.bean.product.Product;
 
 public interface  ProductService {
     Product getProductById(Long id);

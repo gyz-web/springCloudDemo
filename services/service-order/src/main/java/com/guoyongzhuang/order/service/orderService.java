@@ -1,6 +1,7 @@
 package com.guoyongzhuang.order.service;
 
-import com.guoyongzhuang.order.bean.Order;
+
+import com.guoyongzhuang.bean.order.Order;
 
 public interface orderService {
 

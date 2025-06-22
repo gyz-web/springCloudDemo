@@ -2,7 +2,7 @@ package com.guoyongzhuang.product.service.impl;
 
 import java.math.BigDecimal;
 
-import com.guoyongzhuang.product.bean.Product;
+import com.guoyongzhuang.bean.product.Product;
 import com.guoyongzhuang.product.service.ProductService;
 import org.springframework.stereotype.Service;
 

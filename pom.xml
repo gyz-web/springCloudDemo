@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>services</module>
+        <module>moudle</module>
     </modules>
     <groupId>com.guoyongzhuang</groupId>
     <artifactId>springCloudDemo</artifactId>

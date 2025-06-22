@@ -1,6 +1,6 @@
 package com.guoyongzhuang.order.controller;
 
-import com.guoyongzhuang.order.bean.Order;
+import com.guoyongzhuang.bean.order.Order;
 import com.guoyongzhuang.order.service.orderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
